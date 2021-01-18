@@ -12,17 +12,21 @@ module.exports = {
                 type: Sequelize.INTEGER,
                 allowNull: false,
                 references: {
-                    model: "perguntas",
+                    model: "questions",
                     key: "id"
-                }
+                },
+                onUpdate: "CASCADE",
+                onDelete: "CASCADE"
             },
             student_id: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
                 references: {
-                    model: "alunos",
+                    model: "students",
                     key: "id"
-                }
+                },
+                onUpdate: "CASCADE",
+                onDelete: "CASCADE"
             },
             description: {
                 type: Sequelize.STRING,

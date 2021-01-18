@@ -14,7 +14,7 @@ class Answer extends Model {
     /* aqui configuramos os relacionamentos*/
     static associate(models) {
         this.belongsTo(models.Question);
-        this.belongsTo(models.Student, { foreignKey: "student_id" });
+        this.belongsTo(models.Student);
     }
 }
 

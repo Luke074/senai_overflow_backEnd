@@ -6,19 +6,19 @@ const Student = require("../Models/Student");
 const Question = require("../Models/Question");
 const Category = require("../Models/Category");
 const Answer = require("../Models/Answer");
-const conexao = new Sequelize(dbConfig);
+const connection = new Sequelize(dbConfig);
 
 //Inicializa os Models
-Student.init(conexao);
-Question.init(conexao);
-Category.init(conexao);
-Answer.init(conexao);
+Student.init(connection);
+Question.init(connection);
+Category.init(connection);
+Answer.init(connection);
 
 //inicializa os relacionamentos
-Student.associate(conexao.models);
-Question.associate(conexao.models);
-Category.associate(conexao.models);
-Answer.associate(conexao.models);
+Student.associate(connection.models);
+Question.associate(connection.models);
+Category.associate(connection.models);
+Answer.associate(connection.models);
 
 
 // for (let assoc of Object.keys(Question.associations)) {

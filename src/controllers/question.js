@@ -1,19 +1,21 @@
 const Question = require("../Models/Question");
 const Student = require("../Models/Student");
+const Answer = require("../Models/Answer");
 
 module.exports = {
     async index(req, res) {
-        try {
-            const questions = await Question.findAll();
+        const question = await Question.findAll();
 
-            res.send(questions);
+        try {
+            res.status(202).send(question);
         } catch (error) {
             console.log(error);
             res.status(500).send(error);
         }
+
     },
     async store(req, res) {
-        const { titulo, descricao, imagem, gist, categorias } = req.body;
+        const { title, description, image, gist, categories } = req.body;
 
         const alunoId = req.headers.authorization
 
@@ -26,12 +28,12 @@ module.exports = {
                 return res.status(404).send({ error: "Aluno não encontrado" });
 
             //crio a pergunta para o aluno
-            let pergunta = await aluno.createQuestion({ titulo, descricao, imagem, gist });
+            let question = await aluno.createQuestion({ title, description, image, gist });
 
-            await pergunta.addCategories(categorias);
+            await question.addCategories(categories);
 
             //retorno sucesso
-            res.status(201).send(pergunta);
+            res.status(201).send(question);
 
         } catch (error) {
             console.log(error);
@@ -44,20 +46,22 @@ module.exports = {
     },
     async update(req, res) {
         const questionId = req.params.id;
-        const { titulo, descricao } = req.body;
+        const { title, description } = req.body;
         const studentId = req.headers.authorization;
 
         try {
             const question = await Question.findByPk(questionId);
 
             if (!question)
-                return res.status(404).send({ erro: "Questao nao encontrada" });
+                return res.status(404).send({ error: "Questao nao encontrada" });
 
             if (!studentId)
-                return res.status(404).send({ erro: "Voce nao tem autorizacao" });
+                return res.status(404).send({ error: "Voce nao tem autorizacao" });
 
-            question.titulo = titulo;
-            question.descricao = descricao;
+            console.log(question);
+
+            question.title = title;
+            question.description = description;
 
             question.save();
 
@@ -70,14 +74,13 @@ module.exports = {
     },
     async delete(req, res) {
         const questionId = req.params.id;
-
-        const studentId = req.headers.authorization;
+        const { authorization } = req.headers;
 
         try {
             const question = await Question.findOne({
                 where: {
                     id: questionId,
-                    aluno_id: studentId
+                    student_id: authorization
                 }
             });
 

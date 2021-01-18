@@ -7,9 +7,11 @@ module.exports = {
                 type: Sequelize.INTEGER,
                 allowNull: false,
                 references: {
-                    model: "perguntas",
+                    model: "questions",
                     key: "id"
-                }
+                },
+                onUpdate: "CASCADE",
+                onDelete: "CASCADE"
             },
             category_id: {
                 type: Sequelize.INTEGER,
@@ -17,7 +19,9 @@ module.exports = {
                 references: {
                     model: "categories",
                     key: "id"
-                }
+                },
+                onUpdate: "CASCADE",
+                onDelete: "CASCADE"
             },
             created_at: {
                 type: Sequelize.DATE,
@@ -31,6 +35,6 @@ module.exports = {
     },
 
     down: async(queryInterface, Sequelize) => {
-        queryInterface.dropTable("question_category");
+        queryInterface.dropTable("question_categories");
     }
 };

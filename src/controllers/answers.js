@@ -9,7 +9,7 @@ module.exports = {
     async store(req, res) {
         const questionId = req.params.id;
         const studentId = req.headers.authorization;
-        const description = req.body.descricao;
+        const { description } = req.body;
 
         try {
             const question = await Question.findByPk(questionId);
@@ -20,7 +20,7 @@ module.exports = {
             else if (!student)
                 return res.status(404).send({ erro: "Voce nao tem autorizacao" });
 
-            const answers = await question.createAnswer({ description: description, student_id: studentId });
+            const answers = await question.createAnswer({ description, student_id: studentId });
 
             res.status(500).send(answers);
         } catch (error) {
