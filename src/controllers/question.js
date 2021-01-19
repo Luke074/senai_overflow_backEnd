@@ -17,18 +17,18 @@ module.exports = {
     async store(req, res) {
         const { title, description, image, gist, categories } = req.body;
 
-        const alunoId = req.headers.authorization
+        const { studentId } = req;
 
         try {
             //buscar aluno pelo ID
-            let aluno = await Student.findByPk(alunoId);
+            let student = await Student.findByPk(studentId);
 
             //se aluno existir, retorna erro
-            if (!aluno)
+            if (!student)
                 return res.status(404).send({ error: "Aluno não encontrado" });
 
             //crio a pergunta para o aluno
-            let question = await aluno.createQuestion({ title, description, image, gist });
+            let question = await student.createQuestion({ title, description, image, gist });
 
             await question.addCategories(categories);
 
@@ -47,7 +47,7 @@ module.exports = {
     async update(req, res) {
         const questionId = req.params.id;
         const { title, description } = req.body;
-        const studentId = req.headers.authorization;
+        const { studentId } = req;
 
         try {
             const question = await Question.findByPk(questionId);

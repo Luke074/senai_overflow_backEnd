@@ -1,4 +1,7 @@
 const Student = require("../Models/Student");
+const bcryptjs = require("bcryptjs");
+const auth = require("../config/auth.json");
+const jwt = require("jsonwebtoken");
 
 module.exports = {
     //função que vai ser usada na rota
@@ -42,28 +45,38 @@ module.exports = {
         try {
 
             //SELECT * FROM alunos WHERE ra = ?
-            let aluno = await Student.findOne({
-                where: { ra: ra }
+            let student = await Student.findOne({
+                where: {
+                    ra: ra
+                }
             });
 
-            if (aluno)
+            if (student)
                 res.status(400).send({ error: "Aluno ja cadastrado" });
 
-            aluno = await Student.create({ ra, name, email, password });
+            const passwordCript = bcryptjs.hashSync(password);
 
-            res.status(200).send(aluno);
+            student = await Student.create({ ra, name, email, password: passwordCript });
+
+            const token = jwt.sign({
+                studentId: student.id,
+                studentName: student.name
+            }, auth.secret);
+
+            res.status(200).send({
+                student: {
+                    studentId: student.id,
+                    studentName: student.name,
+                    studentRa: student.ra,
+                    studentEmail: student.email
+                },
+                token
+            });
 
         } catch (error) {
             console.log(error);
             res.status(400).send(error);
         }
-
-        /*
-        //incrementar o ultimo id
-        const nextId = alunos.length > 0 ? alunos[alunos.length - 1].id + 1 : 1;
-        //adicionar o aluno na lista
-        alunos.push({ id: nextId, ra, nome, email, senha });
-        */
     },
     async delete(req, res) {
         //recuperar o id do aluno
