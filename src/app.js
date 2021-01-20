@@ -1,5 +1,6 @@
 //importa o Express
 const express = require("express");
+const { errors } = require("celebrate");
 
 require("./database");
 
@@ -11,6 +12,8 @@ const app = express();
 app.use(express.json());
 
 app.use(routes);
+
+app.use(errors());
 
 
 module.exports = app;
