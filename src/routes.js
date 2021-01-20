@@ -1,4 +1,5 @@
 const express = require("express");
+const Multer = require("multer");
 
 const authMiddleware = require("./middleware/authorization");
 
@@ -15,6 +16,22 @@ const feedController = require("./controllers/feed");
 const sessionController = require("./controllers/sessions");
 
 const routes = express.Router();
+const multer = Multer({
+    storage: Multer.diskStorage({
+        destination: "uploads/",
+        filename: (req, file, callback) => {
+            const filename = Date.now() + "." + req.file.originalname.split(".").pop();
+
+            return callback(null, filename);
+        }
+    })
+});
+
+routes.post("/upload", multer.single("arquivo"), (req, res) => {
+    console.log(req.file);
+
+    res.send(req.file);
+});
 
 //rotas publicas
 routes.post("/sessions", sessionController.store);
