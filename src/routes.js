@@ -1,7 +1,7 @@
 const express = require("express");
-const Multer = require("multer");
 
 const authMiddleware = require("./middleware/authorization");
+const uploadQuestions = require("./middleware/uploadQuestions");
 
 //validators middlewares
 const validatorStudents = require("./validator/students");
@@ -16,22 +16,19 @@ const feedController = require("./controllers/feed");
 const sessionController = require("./controllers/sessions");
 
 const routes = express.Router();
-const multer = Multer({
-    storage: Multer.diskStorage({
-        destination: "uploads/",
-        filename: (req, file, callback) => {
-            const filename = Date.now() + "." + req.file.originalname.split(".").pop();
 
-            return callback(null, filename);
-        }
-    })
-});
+// const uploads = multer.single("arquivos");
+// routes.post("/uploads", multer.single("arquivo"), (req, res) => {
 
-routes.post("/upload", multer.single("arquivo"), (req, res) => {
-    console.log(req.file);
-
-    res.send(req.file);
-});
+//     const hadleError = (error) => {
+//         if (error) {
+//             res.status(400).send({ error: "Arquivo invalido" });
+//         }
+//         console.log(req.file);
+//         res.send(req.file);
+//     }
+//     uploads(req, res, hadleError);
+// });
 
 //rotas publicas
 routes.post("/sessions", sessionController.store);
@@ -48,7 +45,11 @@ routes.put("/students/:id", studentController.update);
 
 //Rotas de perguntas
 routes.get("/questions", questionController.index);
-routes.post("/questions", validatorQuestion.create, questionController.store);
+routes.post("/questions",
+    uploadQuestions,
+    validatorQuestion.create,
+    questionController.store
+);
 routes.put("/questions/:id", questionController.update);
 routes.delete("/questions/:id", questionController.delete);
 
