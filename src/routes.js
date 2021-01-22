@@ -1,7 +1,14 @@
 const express = require("express");
+const Multer = require("multer");
+
+const multer = Multer({
+    storage: Multer.memoryStorage(),
+    limits: 1024 * 1024,
+});
 
 const authMiddleware = require("./middleware/authorization");
 const uploadQuestions = require("./middleware/uploadQuestions");
+const uploadImage = require("./services/services");
 
 //validators middlewares
 const validatorStudents = require("./validator/students");
@@ -46,7 +53,8 @@ routes.put("/students/:id", studentController.update);
 //Rotas de perguntas
 routes.get("/questions", questionController.index);
 routes.post("/questions",
-    uploadQuestions,
+    multer.single("image"),
+    uploadImage,
     validatorQuestion.create,
     questionController.store
 );
