@@ -1,13 +1,8 @@
 const Multer = require("multer");
 
 const uploadQuestions = Multer({
-    storage: Multer.diskStorage({
-        destination: "uploads/",
-        filename: (req, file, callback) => {
-            const filename = Date.now() + "." + file.originalname.split(".").pop();
+    storage: Multer.memoryStorage({
 
-            return callback(null, filename);
-        }
     }),
     fileFilter: (req, file, callback) => {
         let allowedTypes = ["image/png", "image/jpeg"];

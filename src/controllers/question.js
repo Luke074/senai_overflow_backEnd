@@ -15,10 +15,8 @@ module.exports = {
 
     },
     async store(req, res) {
-        const { title, description, image, gist, categories } = req.body;
-
-        const { firebaseUrl } = req.file ? req.file : "";
-
+        // const { firebaseUrl } = req.file ? req.file : "";
+        const { title, description, gist, categories } = req.body;
         const categoriesArray = categories.split(",");
 
         const { studentId } = req;
@@ -48,7 +46,7 @@ module.exports = {
                 description: question.description,
                 created_at: question.created_at,
                 gist: question.gist,
-                image: `http://localhost:3333/${req.file.path}`
+                image: req.file.firebaseUrl,
             });
 
         } catch (error) {
