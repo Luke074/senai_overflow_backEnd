@@ -22,7 +22,7 @@ module.exports = {
 
             const answers = await question.createAnswer({ description, student_id: studentId });
 
-            res.status(500).send(answers);
+            res.status(200).send(answers);
         } catch (error) {
             console.log(error);
             res.status(500).send(error);
