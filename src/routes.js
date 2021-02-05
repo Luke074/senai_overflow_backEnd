@@ -34,6 +34,7 @@ const questionController = require("./controllers/question");
 const answerController = require("./controllers/answers");
 const feedController = require("./controllers/feed");
 const sessionController = require("./controllers/sessions");
+const categoriesController = require("./controllers/categories");
 
 const routes = express.Router();
 
@@ -42,6 +43,9 @@ routes.post("/sessions", sessionController.store);
 routes.post("/students", validatorStudents.create, studentController.store);
 
 routes.use(authMiddleware);
+
+//rotas de categorias
+routes.get("/categories", categoriesController.index);
 
 //Rotas privadas
 //Rotas de Alunos
