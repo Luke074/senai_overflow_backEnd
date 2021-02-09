@@ -46,7 +46,7 @@ module.exports = {
                 description: question.description,
                 created_at: question.created_at,
                 gist: question.gist,
-                image: req.file.firebaseUrl,
+                image: req.file ? req.file.firebaseUrl : null,
             });
 
         } catch (error) {
