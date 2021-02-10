@@ -9,13 +9,13 @@ module.exports = {
                 attributes: ["id", "title", "description", "image", "gist", "created_at"],
                 include: [{
                     association: "Student",
-                    attributes: ["id", "name"]
+                    attributes: ["id", "name", "image"]
                 }, {
                     association: "Answers",
                     attributes: ["id", "description", "created_at"],
                     include: {
                         association: "Student",
-                        attributes: ["id", "name"]
+                        attributes: ["id", "name", "image"]
                     },
                 }, {
                     association: "Categories",

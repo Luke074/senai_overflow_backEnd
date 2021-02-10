@@ -30,7 +30,8 @@ module.exports = {
                             studentId: student.id,
                             name: student.name,
                             ra: student.ra,
-                            email: student.email
+                            email: student.email,
+                            image: student.image,
                         },
                         token
                     });
