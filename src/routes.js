@@ -36,6 +36,7 @@ const feedController = require("./controllers/feed");
 const sessionController = require("./controllers/sessions");
 const categoriesController = require("./controllers/categories");
 const imageStudentController = require("./controllers/imageStudent");
+const searchController = require("./controllers/search");
 
 const routes = express.Router();
 
@@ -79,5 +80,8 @@ routes.post("/questions/:id/answers", validatorAnswer.create, answerController.s
 
 //Rotas do feed
 routes.get("/feed", feedController.index);
+
+//rota de pesquisa
+routes.get("/search", searchController.index);
 
 module.exports = routes;
