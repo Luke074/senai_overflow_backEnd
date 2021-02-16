@@ -1,23 +1,4 @@
 const express = require("express");
-// const Multer = require("multer");
-
-// const multer = Multer({
-//     storage: Multer.memoryStorage(),
-//     limits: 1024 * 1024,
-// });
-
-// const uploads = multer.single("arquivos");
-// routes.post("/uploads", multer.single("arquivo"), (req, res) => {
-
-//     const hadleError = (error) => {
-//         if (error) {
-//             res.status(400).send({ error: "Arquivo invalido" });
-//         }
-//         console.log(req.file);
-//         res.send(req.file);
-//     }
-//     uploads(req, res, hadleError);
-// });
 
 const authMiddleware = require("./middleware/authorization");
 const uploadSingleImage = require("./middleware/uploadSingleImage");
@@ -51,6 +32,9 @@ routes.get("/categories", categoriesController.index);
 
 //Rotas privadas
 
+//rota de pesquisa
+routes.get("/search", searchController.index);
+
 //Rotas de Alunos
 routes.get("/students", studentController.index);
 routes.get("/students/:id", studentController.find);
@@ -58,8 +42,8 @@ routes.delete("/students/:id", studentController.delete);
 routes.put("/students/:id", studentController.update);
 
 //rota da imagem do estudante
-routes.post("/students/:id/images", 
-    uploadSingleImage, 
+routes.post("/students/:id/images",
+    uploadSingleImage,
     uploadFirebase,
     imageStudentController.store
 );
@@ -80,8 +64,5 @@ routes.post("/questions/:id/answers", validatorAnswer.create, answerController.s
 
 //Rotas do feed
 routes.get("/feed", feedController.index);
-
-//rota de pesquisa
-routes.get("/search", searchController.index);
 
 module.exports = routes;

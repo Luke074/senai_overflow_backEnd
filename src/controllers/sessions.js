@@ -23,22 +23,16 @@ module.exports = {
                 studentName: student.name,
             });
 
-            setTimeout(
-                () => {
-                    res.status(201).send({
-                        student: {
-                            studentId: student.id,
-                            name: student.name,
-                            ra: student.ra,
-                            email: student.email,
-                            image: student.image,
-                        },
-                        token
-                    });
-                }, 2000
-            );
-
-
+            res.status(201).send({
+                student: {
+                    studentId: student.id,
+                    name: student.name,
+                    ra: student.ra,
+                    email: student.email,
+                    image: student.image,
+                },
+                token
+            });
 
         } catch (error) {
             console.log(error);
