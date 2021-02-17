@@ -33,7 +33,7 @@ routes.get("/categories", categoriesController.index);
 //Rotas privadas
 
 //rota de pesquisa
-routes.get("/search", searchController.index);
+routes.get("/search/:description", searchController.index);
 
 //Rotas de Alunos
 routes.get("/students", studentController.index);

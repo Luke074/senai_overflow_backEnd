@@ -6,7 +6,7 @@ module.exports = {
     async index(req, res) {
         const { studentId } = req;
 
-        const { search } = req.body;
+        const { description } = req.params;
 
         const student = await Student.findByPk(studentId);
 
@@ -16,15 +16,15 @@ module.exports = {
             const questions = await Question.findAll({
                 where: {
                     [Op.or]: [{
-                            title: {
-                                [Op.like]: `${search}`,
-                            },
+                        title: {
+                            [Op.like]: `%${description}%`,
                         },
-                        {
-                            description: {
-                                [Op.like]: `${search}`,
-                            },
+                    },
+                    {
+                        description: {
+                            [Op.like]: `%${description}%`,
                         },
+                    },
                     ],
                 },
                 order: [
