@@ -1,54 +1,50 @@
+const { errors } = require("celebrate");
 const admin = require("firebase-admin");
-const serviceAccount = require("../config/firebase.json");
 
-const Multer = require("multer");
+const serviceAccount = require("../config/firebase-key.json");
 
-const BUCKET = "senai-overflow-2021.appspot.com";
+//alterar para o seu bucket
+const BUCKET = "senai-overflow-2021-01.appspot.com";
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    storageBucket: BUCKET
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: BUCKET,
 });
 
 const bucket = admin.storage().bucket();
 
 const uploadFirebase = (req, res, next) => {
+  if (!req.file) return next();
 
-    if (!req.file)
-        return next();
+  const image = req.file;
 
-    const image = req.file;
-    const filename = Date.now() + "." + image.originalname.split(".").pop();
+  const fileName = Date.now() + "." + image.originalname.split(".").pop();
 
-    const file = bucket.file(filename);
+  const file = bucket.file(fileName);
 
-    const stream = file.createWriteStream({
-        metadata: {
-            contentType: image.mimetype,
-        },
-    });
+  const stream = file.createWriteStream({
+    metadata: {
+      contentType: image.mimeType,
+    },
+  });
 
+  stream.on("error", (error) => {
+    console.error(error);
 
-    stream.on("error", (error) => {
-        console.error(error);
+    res.status(500).send({ error: "Erro ao subir para o Firebase" });
+  });
 
-        res.status(500).send({ error: "Erro ao subir para o fire base" });
-    });
+  stream.on("finish", () => {
+    file.makePublic();
 
-    stream.on("finish", () => {
-        //tornar o arquivo publico
-        file.makePublic();
+    req.file.fileName = fileName;
 
-        req.file.filename = filename;
+    req.file.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/${fileName}`;
 
-        //e tornar a url publica
-        req.file.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/${filename}`;
+    next();
+  });
 
-        next();
-    });
-
-    stream.end(image.buffer);
-
+  stream.end(image.buffer);
 };
 
 module.exports = uploadFirebase;

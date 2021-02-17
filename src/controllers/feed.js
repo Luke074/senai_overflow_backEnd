@@ -1,43 +1,46 @@
-const Question = require("../Models/Question");
-const Student = require("../Models/Student");
-const Answer = require("../Models/Answer");
+const { index } = require("./questions");
+const Question = require("../models/Question");
 
 module.exports = {
-    async index(req, res) {
+  async index(req, res) {
+    try {
+      const feed = await Question.findAll({
+        attributes: [
+          "id",
+          "title",
+          "description",
+          "image",
+          "gist",
+          "created_at",
+          "StudentId",
+        ],
+        include: [
+          {
+            association: "Student",
+            attributes: ["id", "name", "image"],
+          },
+          {
+            association: "Categories",
+            attributes: ["id", "description"],
+            through: { attributes: [] },
+          },
+          {
+            association: "Answers",
+            attributes: ["id", "description", "created_at"],
+            include: {
+              association: "Student",
+              attributes: ["id", "name", "image"],
+            },
+          },
+        ],
+        order: [["created_at", "DESC"]],
+        limit: [5, 5],
+      });
 
-        let pages = req.query.pages;
-        pages = pages - 1;
-
-        try {
-            const feed = await Question.findAll(
-                {
-                    attributes: ["id", "title", "description", "image", "gist", "created_at", "StudentId"],
-                    include: [{
-                        association: "Student",
-                        attributes: ["id", "name", "image"]
-                    }, {
-                        association: "Answers",
-                        attributes: ["id", "description", "created_at"],
-                        include: {
-                            association: "Student",
-                            attributes: ["id", "name", "image"]
-                        },
-                    }, {
-                        association: "Categories",
-                        through: { attributes: [] },
-                        attributes: ["id", "description"]
-                    }],
-                    order: [
-                        ["created_at", "DESC"]
-                    ],
-                    limit: [5 * pages, 5],
-                });
-
-            res.send(feed);
-        } catch (error) {
-            console.log(error);
-            res.status(500).send(error);
-        }
-
+      res.send(feed);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
     }
-}
+  },
+};

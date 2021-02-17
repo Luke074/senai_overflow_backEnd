@@ -1,21 +1,22 @@
-//importa o Express
+//importa o express
 const express = require("express");
 const { errors } = require("celebrate");
 
 const cors = require("cors");
 
-require("./database");
-
-//importar as rotas
+//importa as rotas
 const routes = require("./routes");
 
+require("./database");
+
+//cria a aplicação express
 const app = express();
 
 app.use(express.json());
 
 app.use(cors());
 
-//Definimos a pasta uploads como publica, servindo arquivos estáticos
+//definimos a pasta uploads como pública, servindo arquivos estáticos
 app.use("/uploads", express.static("uploads"));
 
 app.use(routes);

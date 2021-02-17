@@ -1,6 +1,6 @@
 const app = require("./app");
 
-//porta HTTP
+//porta do servidor HTTP
 const PORT = 3333;
 
 //subindo o servidor na web
