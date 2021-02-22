@@ -1,7 +1,7 @@
 const Student = require("../models/Student");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const auth = require("../config/auth.json");
+const auth = require("../config/auth");
 const { generateToken } = require("../utils");
 
 module.exports = {

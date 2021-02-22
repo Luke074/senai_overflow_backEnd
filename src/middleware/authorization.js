@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const auth = require("../config/auth.json");
+const auth = require("../config/auth");
 
 module.exports = (req, res, next) => {
   //pegando o campo autorização do cabeçalho da requisição

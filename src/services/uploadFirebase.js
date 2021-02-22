@@ -1,7 +1,7 @@
 const { errors } = require("celebrate");
 const admin = require("firebase-admin");
 
-const serviceAccount = require("../config/firebase-key.json");
+const serviceAccount = require("../config/firebase-key");
 
 //alterar para o seu bucket
 const BUCKET = "senai-overflow-2021-01.appspot.com";
