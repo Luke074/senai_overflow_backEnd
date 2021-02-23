@@ -5,3 +5,7 @@
 /uploads
 
 /.vscode
+
+/src/auth.js
+
+/src/firebase-key.js
